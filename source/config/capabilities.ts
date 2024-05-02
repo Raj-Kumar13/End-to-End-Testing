@@ -5,7 +5,9 @@ export const BROWSER_CONFIG_LOCAL = [{
     browserName: 'chrome',
     'goog:chromeOptions':{
         args: [
-            '--headless',
+
+           // '--headless',
+
             '--ignore-certificate-errors',
             '--disable-gpu',
             '--disable-software-rasterizer',
