@@ -1,5 +1,8 @@
 {
     "compilerOptions": {
+        "outDir": "./built",
+        "allowJs": false,
+        "allowSyntheticDefaultImports": true,
         "moduleResolution": "node",
         "module": "ESNext",
         "target": "es2022",
@@ -26,7 +29,10 @@
         "noFallthroughCasesInSwitch": true
     },
     "include": [
-        "test",
+        "source/**/*",
         "wdio.conf.ts"
+    ],
+    "exclude": [
+        "node_modules"
     ]
 }

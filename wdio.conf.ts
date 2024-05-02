@@ -1,5 +1,9 @@
 import type { Options } from '@wdio/types'
-
+import { BROWSER_CONFIG_LOCAL} from  './source/config/capabilities'
+const debug = !!process.env.DEBUG
+const stepTimeout = debug?24*60*60*1000:50000;
+const maxInstances = debug?1:10;
+const capabilities = debug?[{browserName:'chrome',maxInstances:1}]:BROWSER_CONFIG_LOCAL;
 export const config: Options.Testrunner = {
     //
     // ====================
@@ -54,15 +58,13 @@ export const config: Options.Testrunner = {
     // and 30 processes will get spawned. The property handles how many capabilities
     // from the same test should run tests.
     //
-    maxInstances: 10,
+    maxInstances: maxInstances,
     //
     // If you have trouble getting all important capabilities together, check out the
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
     // https://saucelabs.com/platform/platform-configurator
     //
-    capabilities: [{
-        browserName: 'chrome'
-    }],
+    capabilities:capabilities,
 
     //
     // ===================
@@ -134,12 +136,21 @@ export const config: Options.Testrunner = {
     // Test reporter for stdout.
     // The only one supported by default is 'dot'
     // see also: https://webdriver.io/docs/dot-reporter
-    reporters: ['spec',['allure', {outputDir: 'allure-results'}]],
+    reporters: ['spec',['allure', {outputDir: 'allure-results',
+                                    disableWebdriverStepsReporting:true,
+                                useCucumberStepReporting:true,
+                            disableWebdriverScreenshotsReporting:true}],
+                        ['json',
+                    {outputDir:'./report',
+                outputFileFormate:(opts:any)=>{
+                    return `results-${opts.cid}.${opts.capabilities.browserName}.json`
+                }}]
+                        ],
 
     // If you are using Cucumber you need to specify the location of your step definitions.
     cucumberOpts: {
         // <string[]> (file/dir) require files before executing features
-        require: ['./source/features/step-definitions/*.ts'],
+        require: ['./source/step-definitions/*.steps.ts'],
         // <boolean> show full backtrace for errors
         backtrace: false,
         // <string[]> ("extension:module") require files with the given EXTENSION after requiring MODULE (repeatable)
@@ -159,9 +170,10 @@ export const config: Options.Testrunner = {
         // <string> (expression) only execute the features or scenarios with tags matching the expression
         tagExpression: '',
         // <number> timeout for step definitions
-        timeout: 60000,
+        timeout: stepTimeout,
         // <boolean> Enable this config to treat undefined definitions as warnings.
-        ignoreUndefinedDefinitions: false
+        ignoreUndefinedDefinitions: false,
+        formate:['pretty']
     },
 
 
@@ -241,8 +253,9 @@ export const config: Options.Testrunner = {
      * @param {ITestCaseHookParameter} world    world object containing information on pickle and test step
      * @param {object}                 context  Cucumber World object
      */
-    // beforeScenario: function (world, context) {
-    // },
+     beforeScenario: function (world, context) {
+        console.log('|| Scenario Started ||',world.pickle.name)
+     },
     /**
      *
      * Runs before a Cucumber Step.
@@ -263,8 +276,13 @@ export const config: Options.Testrunner = {
      * @param {number}             result.duration  duration of scenario in milliseconds
      * @param {object}             context          Cucumber World object
      */
-    // afterStep: function (step, scenario, result, context) {
-    // },
+    afterStep: async function (step, scenario, result, context) {
+        await browser.takeScreenshot();
+        if(!result.passed){
+            await browser.takeScreenshot();
+            await browser.reloadSession();
+        }
+    },
     /**
      *
      * Runs after a Cucumber Scenario.
@@ -275,8 +293,12 @@ export const config: Options.Testrunner = {
      * @param {number}                 result.duration  duration of scenario in milliseconds
      * @param {object}                 context          Cucumber World object
      */
-    // afterScenario: function (world, result, context) {
-    // },
+     afterScenario: async function (world, result, context) {
+        
+            await browser.deleteCookies();
+            await browser.reloadSession();
+        console.log('|| Scenario Ended ||',world.pickle.name)
+     },
     /**
      *
      * Runs after a Cucumber Feature.
@@ -320,8 +342,10 @@ export const config: Options.Testrunner = {
      * @param {Array.<Object>} capabilities list of capabilities details
      * @param {<Object>} results object containing test results
      */
-    // onComplete: function(exitCode, config, capabilities, results) {
-    // },
+     onComplete: function(exitCode, config, capabilities, results) {
+        const mergeResult = require('wdio-json-reporter/mergeResult')
+        mergeResult('./reports','results-*','jsonReportAllTests.json')
+    },
     /**
     * Gets executed when a refresh happens.
     * @param {string} oldSessionId session ID of the old session
