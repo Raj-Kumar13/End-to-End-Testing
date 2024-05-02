@@ -4,7 +4,20 @@ import { BROWSER_CONFIG_LOCAL} from  './source/config/capabilities'
 const debug = !!process.env.DEBUG
 const stepTimeout = debug?24*60*60*1000:50000;
 const maxInstances = debug?1:10;
-const capabilities = debug?[{browserName:'chrome',maxInstances:1}]:BROWSER_CONFIG_LOCAL;
+const capabilities = debug?[{browserName:'chrome',maxInstances:1}]:[{
+    maxInstances: 10,
+    browserName: 'chrome',
+    'goog:chromeOptions':{
+        args: [
+           // '--headless',
+            '--ignore-certificate-errors',
+            '--disable-gpu',
+            '--disable-software-rasterizer',
+            '--disable-notification',
+            '--window-size=1920,1080'
+        ]
+    }
+}];
 
 export const config: Options.Testrunner = {
     //
@@ -175,7 +188,7 @@ export const config: Options.Testrunner = {
         // <boolean> fail if there are any undefined or pending steps
         strict: false,
         // <string> (expression) only execute the features or scenarios with tags matching the expression
-        tagExpression: '',
+        tagExpression: '@demo',
         // <number> timeout for step definitions
 
         timeout: stepTimeout,
