@@ -3,6 +3,7 @@
         "outDir": "./built",
         "allowJs": false,
         "allowSyntheticDefaultImports": true,
+        
         "moduleResolution": "node",
         "module": "ESNext",
         "target": "es2022",
@@ -15,7 +16,7 @@
             "@wdio/globals/types",
             "expect-webdriverio",
             "@wdio/cucumber-framework",
-            "@wdio/visual-service"
+            "@wdio/visual-service",
         ],
         "skipLibCheck": true,
         "noEmit": true,
@@ -32,6 +33,11 @@
         "source/**/*",
         "wdio.conf.ts"
     ],
+    "paths": {
+        "*": ["node_modules/*"], // Map all module imports to the node_modules directory
+        "pages/*": ["source/pages/*"], // Map imports starting with pages/ to source/pages/
+        "env/*": ["source/env/*"] // Map imports starting with env/ to source/env/
+      },
     "exclude": [
         "node_modules"
     ]
