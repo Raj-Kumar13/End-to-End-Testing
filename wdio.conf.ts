@@ -2,6 +2,7 @@ import type { Options } from '@wdio/types'
 
 import { BROWSER_CONFIG_LOCAL } from './source/config/capabilities'
 const debug = !!process.env.DEBUG
+
 const stepTimeout = debug ? 24 * 60 * 60 * 1000 : 50000;
 const maxInstances = debug ? 1 : 10;
 

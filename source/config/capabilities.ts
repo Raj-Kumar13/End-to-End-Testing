@@ -1,5 +1,6 @@
 // //Local RUN CONFIG
 
+
 // export const BROWSER_CONFIG_LOCAL = [{
 //     maxInstances: 10,
 //     browserName: 'chrome',
@@ -15,4 +16,4 @@
 //             '--window-size=1920,1080'
 //         ]
 //     }
-// }];
+// }]
