@@ -1,16 +1,16 @@
 import type { Options } from '@wdio/types'
 
-import { BROWSER_CONFIG_LOCAL} from  './source/config/capabilities'
+import { BROWSER_CONFIG_LOCAL } from './source/config/capabilities'
 const debug = !!process.env.DEBUG
-const stepTimeout = debug?24*60*60*1000:50000;
-const maxInstances = debug?1:10;
+const stepTimeout = debug ? 24 * 60 * 60 * 1000 : 50000;
+const maxInstances = debug ? 1 : 10;
 
-const capabilities = debug?[{browserName:'chrome',maxInstances:1}]:[{
+const capabilities = debug ? [{ browserName: 'chrome', maxInstances: 1 }] : [{
     maxInstances: 10,
     browserName: 'chrome',
-    'goog:chromeOptions':{
+    'goog:chromeOptions': {
         args: [
-           // '--headless',
+            // '--headless',
             '--ignore-certificate-errors',
             '--disable-gpu',
             '--disable-software-rasterizer',
@@ -35,7 +35,7 @@ export const config: Options.Testrunner = {
             transpileOnly: true
         }
     },
-    
+
     //
     // ==================
     // Specify Test Files
@@ -83,7 +83,7 @@ export const config: Options.Testrunner = {
     // https://saucelabs.com/platform/platform-configurator
     //
 
-    capabilities:capabilities,
+    capabilities: capabilities,
 
     //
     // ===================
@@ -92,7 +92,7 @@ export const config: Options.Testrunner = {
     // Define all options that are relevant for the WebdriverIO instance here
     //
     // Level of logging verbosity: trace | debug | info | warn | error | silent
-    logLevel: 'info',
+    logLevel: 'error',
     //
     // Set specific log levels per logger
     // loggers:
@@ -141,7 +141,7 @@ export const config: Options.Testrunner = {
     // Make sure you have the wdio adapter package for the specific framework installed
     // before running any tests.
     framework: 'cucumber',
-    
+
     //
     // The number of times to retry the entire specfile when it fails as a whole
     // specFileRetries: 1,
@@ -156,16 +156,20 @@ export const config: Options.Testrunner = {
     // The only one supported by default is 'dot'
     // see also: https://webdriver.io/docs/dot-reporter
 
-    reporters: ['spec',['allure', {outputDir: 'allure-results',
-                                    disableWebdriverStepsReporting:true,
-                                useCucumberStepReporting:true,
-                            disableWebdriverScreenshotsReporting:true}],
-                        ['json',
-                    {outputDir:'./report',
-                outputFileFormate:(opts:any)=>{
+    reporters: ['spec', ['allure', {
+        outputDir: 'allure-results',
+        disableWebdriverStepsReporting: true,
+        useCucumberStepReporting: true,
+        disableWebdriverScreenshotsReporting: true
+    }],
+        ['json',
+            {
+                outputDir: './report',
+                outputFileFormate: (opts: any) => {
                     return `results-${opts.cid}.${opts.capabilities.browserName}.json`
-                }}]
-                        ],
+                }
+            }]
+    ],
 
     // If you are using Cucumber you need to specify the location of your step definitions.
     cucumberOpts: {
@@ -196,7 +200,7 @@ export const config: Options.Testrunner = {
         timeout: stepTimeout,
         // <boolean> Enable this config to treat undefined definitions as warnings.
         ignoreUndefinedDefinitions: false,
-        formate:['pretty']
+        formate: ['pretty']
     },
 
 
@@ -277,9 +281,9 @@ export const config: Options.Testrunner = {
      * @param {object}                 context  Cucumber World object
      */
 
-     beforeScenario: function (world, context) {
-        console.log('|| Scenario Started ||',world.pickle.name)
-     },
+    beforeScenario: function (world, context) {
+        console.log('|| Scenario Started ||', world.pickle.name)
+    },
     /**
      *
      * Runs before a Cucumber Step.
@@ -303,7 +307,7 @@ export const config: Options.Testrunner = {
 
     afterStep: async function (step, scenario, result, context) {
         await browser.takeScreenshot();
-        if(!result.passed){
+        if (!result.passed) {
             await browser.takeScreenshot();
             await browser.reloadSession();
         }
@@ -320,12 +324,12 @@ export const config: Options.Testrunner = {
      * @param {object}                 context          Cucumber World object
      */
 
-     afterScenario: async function (world, result, context) {
-        
-            await browser.deleteCookies();
-            await browser.reloadSession();
-        console.log('|| Scenario Ended ||',world.pickle.name)
-     },
+    afterScenario: async function (world, result, context) {
+
+        await browser.deleteCookies();
+        await browser.reloadSession();
+        console.log('|| Scenario Ended ||', world.pickle.name)
+    },
 
     /**
      *
@@ -335,7 +339,7 @@ export const config: Options.Testrunner = {
      */
     // afterFeature: function (uri, feature) {
     // },
-    
+
     /**
      * Runs after a WebdriverIO command gets executed
      * @param {string} commandName hook command name
@@ -371,9 +375,9 @@ export const config: Options.Testrunner = {
      * @param {<Object>} results object containing test results
      */
 
-     onComplete: function(exitCode, config, capabilities, results) {
-        const mergeResult = require('wdio-json-reporter/mergeResult')
-        mergeResult('./reports','results-*','jsonReportAllTests.json')
+    onComplete: function (exitCode, config, capabilities, results) {
+        //  const mergeResult = require('wdio-json-reporter/mergeResult')
+        //mergeResult('./reports', 'results-*', 'jsonReportAllTests.json')
     },
 
     /**

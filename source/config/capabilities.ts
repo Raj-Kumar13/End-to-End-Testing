@@ -1,18 +1,18 @@
-//Local RUN CONFIG
+// //Local RUN CONFIG
 
-export const BROWSER_CONFIG_LOCAL = [{
-    maxInstances: 10,
-    browserName: 'chrome',
-    'goog:chromeOptions':{
-        args: [
+// export const BROWSER_CONFIG_LOCAL = [{
+//     maxInstances: 10,
+//     browserName: 'chrome',
+//     'goog:chromeOptions':{
+//         args: [
 
-           // '--headless',
+//            // '--headless',
 
-            '--ignore-certificate-errors',
-            '--disable-gpu',
-            '--disable-software-rasterizer',
-            '--disable-notification',
-            '--window-size=1920,1080'
-        ]
-    }
-}];
+//             '--ignore-certificate-errors',
+//             '--disable-gpu',
+//             '--disable-software-rasterizer',
+//             '--disable-notification',
+//             '--window-size=1920,1080'
+//         ]
+//     }
+// }];

@@ -1,0 +1,42 @@
+{
+     "cucumberautocomplete.steps": [
+         "./source/step-definitions/*.steps.ts"
+         //"source/step-definitions/*.steps.ts"
+     ],
+    "cucumberautocomplete.syncfeatures":"./source/features/**/*.feature",
+    "cucumberautocomplete.strictGherkinCompletion": true,
+    "cucumberautocomplete.strictGherkinValidation": true,
+    "cucumberautocomplete.smartSnippets": true,
+    "cucumberautocomplete.stepsInvariants": true,
+    "cucumberautocomplete.customParameters": [
+        {
+            "parameter":"{ab}",
+            "value":"(a/b)"
+        }
+    ],
+    "cucumberautocomplete.skipDocStringsFormat": true,
+    "cucumberautocomplete.formatConfOverride": {
+        "And":3,
+        "But":"relative"
+    },
+    "cucumberautocomplete.onTypeFormat": true,
+    "editor.quickSuggestions": {
+        "other":true,
+        "comments": true,
+        "strings": true
+    },
+    "cucumberautocomplete.gherkinDefinitionPart": "(Given/When/Then)\\(",
+    "[typescript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "editor.formatOnSave": true,
+    "json.schemas": [
+        {
+            "fileMatch": [
+                "/package.json"
+            ],
+            "url":"https://json.schemastore.org/package",
+            "schema": true
+        }
+    ]
+}

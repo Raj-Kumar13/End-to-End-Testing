@@ -1,13 +1,7 @@
-Feature: Demo feature
-
-   @demo
-    Scenario Outline: run first demo feature
-
-        Given Google page is opened
-       # When Search with <SearchItem>
-       # Then Click on the first Searched result
-       # Then URL should match <ExpectedURL>
-
-        Examples:
-            | Test_ID    | SearchItem | ExpectedURL           |
-            | Demo_Test1 | WDIO       | https://webdriver.io/ |
+Feature: As a OrangeHRM portal user I want to search/create record
+    @demo
+    Scenario: Lauch the OrangeHRM Portal url and login
+        Given User launches to the OrangeHRM portal
+        When User logs in to the OrangeHRM application
+            | OrangeHRM |
+        Then Verify User navigates to correct landing page
